@@ -10,12 +10,24 @@ export const ProfileContainer = styled.section`
 
   padding: 2rem 2.5rem;
   gap: 2rem;
+
+  position: relative;
+
+  @media only screen and (max-width: 599px) {
+    flex-direction: column;
+    min-height: 212px;
+    height: fit-content;
+  }
 `;
 
 export const Cover = styled.img`
   width: 148px;
   height: 148px;
   border-radius: 8px;
+
+  @media only screen and (max-width: 599px) {
+    align-self: center;
+  }
 `;
 
 export const Aside = styled.aside`
@@ -29,6 +41,7 @@ export const Aside = styled.aside`
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 0.5rem;
+    gap: 1rem;
 
     p {
       font-size: 1.5rem;
@@ -71,6 +84,11 @@ export const Aside = styled.aside`
     display: flex;
     gap: 1.5rem;
     color: ${(props) => props.theme["blue-400"]};
+
+    @media only screen and (max-width: 599px) {
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 `;
 
@@ -86,6 +104,10 @@ export const Tag = styled.span`
     max-width: 300px;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    @media only screen and (max-width: 599px) {
+      white-space: normal;
+    }
   }
 
   svg {

@@ -8,6 +8,7 @@ import {
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { Loading } from "../../../../components/Loading";
 
 type ProfileType = {
   name: string;
@@ -48,42 +49,49 @@ export function Profile() {
     getUser();
   }, [userSearch]);
 
-  return (
-    <ProfileContainer>
-      <Cover src={user.avatarUrl} alt="" />
+  if (!user.login) {
+    return (
+      <ProfileContainer>
+        <Loading />
+      </ProfileContainer>
+    );
+  } else
+    return (
+      <ProfileContainer>
+        <Cover src={user.avatarUrl} alt="" />
 
-      <Aside>
-        <header>
-          <p>{user.name}</p>
-          <a href={user.htmlUrl}>
-            GITHUB
-            <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-          </a>
-        </header>
-        <main>
-          <p>{user.bio}</p>
-        </main>
-        <footer>
-          <Tag>
-            <FontAwesomeIcon icon={faGithub} />
-            <span title={user.login}>{user.login}</span>
-          </Tag>
+        <Aside>
+          <header>
+            <p>{user.name}</p>
+            <a href={user.htmlUrl}>
+              GITHUB
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+            </a>
+          </header>
+          <main>
+            <p>{user.bio}</p>
+          </main>
+          <footer>
+            <Tag>
+              <FontAwesomeIcon icon={faGithub} />
+              <span title={user.login}>{user.login}</span>
+            </Tag>
 
-          <Tag>
-            <FontAwesomeIcon icon={faBuilding} />
-            <span title={user.company}>{user.company}</span>
-          </Tag>
+            <Tag>
+              <FontAwesomeIcon icon={faBuilding} />
+              <span title={user.company}>{user.company}</span>
+            </Tag>
 
-          <Tag>
-            <FontAwesomeIcon icon={faUserGroup} />
-            <span title={followers}>
-              {user.followers > 1
-                ? `${user.followers} seguidores`
-                : `${user.followers} seguidor`}
-            </span>
-          </Tag>
-        </footer>
-      </Aside>
-    </ProfileContainer>
-  );
+            <Tag>
+              <FontAwesomeIcon icon={faUserGroup} />
+              <span title={followers}>
+                {user.followers > 1
+                  ? `${user.followers} seguidores`
+                  : `${user.followers} seguidor`}
+              </span>
+            </Tag>
+          </footer>
+        </Aside>
+      </ProfileContainer>
+    );
 }
