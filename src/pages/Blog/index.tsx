@@ -1,51 +1,93 @@
-import { Header } from "../../components/Header";
+import { useCallback, useEffect, useState } from "react";
+import { api } from "../../lib/axios";
 import { Profile } from "./components/Profile";
 import { SearchForm } from "./components/SearchForm";
-import { BlogContainer, FormHeader, Post, Posts } from "./styles";
+import { FormHeader, PostItem, PostList } from "./styles";
+
+type PostProps = {
+  number: number;
+  title: string;
+  comments: number;
+  createdAt: string;
+  body: string;
+  htmlUrl: string;
+  user: {
+    login: string;
+  };
+};
+
+type Posts = {
+  totalCount: number;
+  items: PostProps[];
+};
 
 export function Blog() {
+  const [posts, setPosts] = useState({} as Posts);
+  const repoSearchDefault = import.meta.env.BLOG_REPO_DEFAULT;
+
+  const publicacoes = posts.totalCount === 1 ? "publicação" : "publicações";
+
+  const getPosts = useCallback(
+    async (filter: string) => {
+      const response = await api.get("/search/issues", {
+        params: {
+          q: `${filter}repo:${repoSearchDefault}`,
+        },
+      });
+
+      const items: PostProps[] = response.data?.items.map((item: any) => {
+        return {
+          number: item.number,
+          title: item.title,
+          comments: item.comments,
+          createdAt: item.created_at,
+          body: item.body,
+          htmlUrl: item.html_url,
+          user: item.user.login,
+        } as PostProps;
+      });
+
+      setPosts((state) => {
+        return {
+          ...state,
+          totalCount: response.data.total_count,
+          items,
+        };
+      });
+    },
+    [repoSearchDefault]
+  );
+
+  useEffect(() => {
+    getPosts("");
+  }, [getPosts]);
+
   return (
-    <div>
-      <Header />
+    <>
+      <Profile />
 
-      <BlogContainer>
-        <Profile />
+      <FormHeader>
+        <span>Publicações</span>
+        <span>
+          {posts.totalCount} {publicacoes}
+        </span>
+      </FormHeader>
 
-        <FormHeader>
-          <span>Publicações</span>
-          <span>6 publicações</span>
-        </FormHeader>
+      <SearchForm />
 
-        <SearchForm />
-
-        <Posts>
-          <Post>
-            <header>
-              <h1>Titulo 1</h1>
-              <span>Há 1 dia</span>
-            </header>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui,
-              iusto perferendis veniam repellendus quam quasi rem nemo
-              laboriosam iste molestias cumque porro, atque iure fugit aut,
-              maiores reiciendis optio facere!
-            </p>
-          </Post>
-
-          <Post>
-            <header>
-              <h1>Titulo 2</h1>
-              <span>Há 2 dias</span>
-            </header>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui,
-              iusto perferendis veniam repellendus quam quasi rem nemo
-              laboriosam iste molestias cumque porro, atque iure fugit aut,
-              maiores reiciendis optio facere!
-            </p>
-          </Post>
-        </Posts>
-      </BlogContainer>
-    </div>
+      <PostList>
+        {posts?.items?.map((post) => {
+          return (
+            <PostItem key={post.number}>
+              <header>
+                <h1>{post.title}</h1>
+                <span>Há 1 dia</span>
+              </header>
+              <p>{post.body}</p>
+            </PostItem>
+          );
+        })}
+      </PostList>
+    </>
   );
 }
