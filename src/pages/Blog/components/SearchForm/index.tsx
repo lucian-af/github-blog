@@ -10,17 +10,21 @@ const searchFormSchema = z.object({
 
 type SearchFormInputs = z.infer<typeof searchFormSchema>;
 
-export function SearchForm() {
+type SearchFormProps = {
+  filter: (query: string) => void;
+};
+
+export function SearchForm({ filter }: SearchFormProps) {
   const { register } = useForm<SearchFormInputs>({
     resolver: zodResolver(searchFormSchema),
   });
 
   function handleSearch(data: string) {
-    console.info(data);
+    filter(data);
   }
 
   return (
-    <SearchFormContainer>
+    <SearchFormContainer onSubmit={(event) => event.preventDefault()}>
       <input
         type="text"
         placeholder="Buscar conteúdo"
