@@ -17,7 +17,7 @@ Seguindo os passos acima o projeto é para rodar em uma URL, que é mostrada no 
 
 ![Página principal](https://user-images.githubusercontent.com/65927348/196068293-836a982c-1ed7-4e18-b928-31593cf4fb5b.png)
 
-### Como o projetop está organizado
+### Como o projeto está organizado
 
 - `src/pages` - ficam as páginas/rotas da aplicação;
 - `src/components` - ficam os componentes genéricos, que podem ser adicionados em novas páginas/rotas;
