@@ -11,6 +11,8 @@ import {
 } from "./styles";
 import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { dateFormatted, dateRelativeToNow } from "../../utils/FormatDate";
 
 type PostProps = {
   number: number;
@@ -32,7 +34,7 @@ type Posts = {
 export function Blog() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState({} as Posts);
-  const repoSearchDefault = "";
+  const repoSearchDefault = import.meta.env.BLOG_REPO_DEFAULT;
 
   const publicacoes = posts.totalCount === 1 ? "publicação" : "publicações";
 
@@ -81,6 +83,10 @@ export function Blog() {
     }
   }
 
+  function previaConteudo(texto: string, tamanho: number) {
+    return `${texto.substring(0, tamanho)}...`;
+  }
+
   useEffect(() => {
     getPosts("");
   }, [getPosts]);
@@ -110,10 +116,17 @@ export function Blog() {
               >
                 <header>
                   <h1>{post.title}</h1>
-                  <span>Há 1 dia</span>
+                  <time
+                    title={dateFormatted(new Date(post.createdAt))}
+                    dateTime={new Date(post.createdAt).toISOString()}
+                  >
+                    {dateRelativeToNow(new Date(post.createdAt))}
+                  </time>
                 </header>
                 <PostItemPrevia>
-                  <ReactMarkdown>{post.body.substring(0, 80)}</ReactMarkdown>
+                  <ReactMarkdown>
+                    {previaConteudo(post.body, 150)}
+                  </ReactMarkdown>
                 </PostItemPrevia>
               </PostItem>
             );

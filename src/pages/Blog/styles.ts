@@ -79,13 +79,15 @@ export const PostItem = styled.div`
       overflow: hidden;
     }
 
-    span {
+    time {
       color: ${(props) => props.theme["blue-500"]};
       font-size: 0.875rem;
-      width: 100px;
+      text-transform: capitalize;
       text-align: right;
-      margin-top: 0.4rem;
+
+      width: 100px;
       flex-basis: 50%;
+      margin-top: 0.4rem;
 
       @media only screen and (max-width: 599px) {
         flex-basis: 100%;
@@ -99,6 +101,7 @@ export const PostItemPrevia = styled.div`
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-wrap: break-word;
 
   height: fit-content;
 

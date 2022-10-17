@@ -63,7 +63,7 @@ export function Profile() {
         <Aside>
           <header>
             <p>{user.name}</p>
-            <a href={user.htmlUrl}>
+            <a href={user.htmlUrl} target="_blank" rel="noreferrer">
               GITHUB
               <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
             </a>
